@@ -41,6 +41,9 @@ fin exec sed -i 's/DB_PASSWORD=/DB_PASSWORD=user/g' "${LARAVEL_ROOT}/.env"
 echo "Installing artisan addon..."
 fin addon install artisan
 
+echo "Installing cti-b2b addon..."
+fin addon install cti-b2b
+
 # This code resolve PHP Composer create-project issue copying all needed files.
 # Ref.: https://github.com/composer/composer/issues/7455
 cd $PROJECT_ROOT
