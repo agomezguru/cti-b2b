@@ -9,16 +9,18 @@ green_bg='\033[42m'
 yellow='\033[1;33m'
 NC='\033[0m'
 
-LARAVEL_ROOT="./"
+LARAVEL_ROOT=${PWD##*/}
 
 # ---------- Runtime ------------
 
-if [ ! $(ls -A "$PROJECT_ROOT" | wc -l) -eq 3 ]; then
-  echo -e "${yellow}Directory is not empty${NC}: $PROJECT_ROOT"
-  echo "Are you sure to want use this directory and start Laravel installation?"
+if [ -d "$PROJECT_ROOT/$LARAVEL_ROOT" ]; then
+  echo -e "${yellow}Directory exists${NC}: $PROJECT_ROOT/$LARAVEL_ROOT"
+  echo "Delete this directory and start Laravel installation?"
   echo "Press Enter to delete it and continue or Ctrl-C to cancel..."
   read -p ""
 fi
+
+rm -r "$PROJECT_ROOT/$LARAVEL_ROOT" 2>/dev/null
 
 # Reset containers
 fin reset -f
@@ -31,13 +33,22 @@ cd "$PROJECT_ROOT"
 fin exec composer create-project --prefer-dist laravel/laravel "$LARAVEL_ROOT"
 
 echo "Copying Database settings..."
-fin exec sed -i 's/DB_HOST=127.0.0.1/DB_HOST=db/g' ".env"
-fin exec sed -i 's/DB_DATABASE=laravel/DB_DATABASE=default/g' ".env"
-fin exec sed -i 's/DB_USERNAME=root/DB_USERNAME=user/g' ".env"
-fin exec sed -i 's/DB_PASSWORD=/DB_PASSWORD=user/g' ".env"
+fin exec sed -i 's/DB_HOST=127.0.0.1/DB_HOST=db/g' "${LARAVEL_ROOT}/.env"
+fin exec sed -i 's/DB_DATABASE=laravel/DB_DATABASE=default/g' "${LARAVEL_ROOT}/.env"
+fin exec sed -i 's/DB_USERNAME=root/DB_USERNAME=user/g' "${LARAVEL_ROOT}/.env"
+fin exec sed -i 's/DB_PASSWORD=/DB_PASSWORD=user/g' "${LARAVEL_ROOT}/.env"
 
 echo "Installing artisan addon..."
 fin addon install artisan
+
+cd $PROJECT_ROOT
+cp -R .docksal $LARAVEL_ROOT
+cp -R .github $LARAVEL_ROOT
+cp README.md $LARAVEL_ROOT/COATI.md
+cd ..
+mv $LARAVEL_ROOT $LARAVEL_ROOT-Old
+cd $LARAVEL_ROOT-Old
+mv $LARAVEL_ROOT-Old ..
 
 echo "------------------------------------"
 echo -e "${green}Installation complete.${NC}"
