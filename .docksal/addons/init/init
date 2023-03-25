@@ -52,7 +52,7 @@ mv $LARAVEL_ROOT $LARAVEL_ROOT-Old
 cd $LARAVEL_ROOT-Old
 mv $LARAVEL_ROOT ..
 cd ..
-sudo rm $LARAVEL_ROOT-Old #needs sudo password
+sudo rm -R $LARAVEL_ROOT-Old #needs sudo password
 
 echo "------------------------------------"
 echo -e "${green}Installation complete.${NC}"
