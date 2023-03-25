@@ -41,6 +41,8 @@ fin exec sed -i 's/DB_PASSWORD=/DB_PASSWORD=user/g' "${LARAVEL_ROOT}/.env"
 echo "Installing artisan addon..."
 fin addon install artisan
 
+# This code resolve PHP Composer create-project issue copying all needed files.
+# Ref.: https://github.com/composer/composer/issues/7455
 cd $PROJECT_ROOT
 cp -R .docksal $LARAVEL_ROOT
 cp -R .github $LARAVEL_ROOT
@@ -48,7 +50,9 @@ cp README.md $LARAVEL_ROOT/COATI.md
 cd ..
 mv $LARAVEL_ROOT $LARAVEL_ROOT-Old
 cd $LARAVEL_ROOT-Old
-mv $LARAVEL_ROOT-Old ..
+mv $LARAVEL_ROOT ..
+cd ..
+sudo rm $LARAVEL_ROOT-Old #needs sudo password
 
 echo "------------------------------------"
 echo -e "${green}Installation complete.${NC}"
