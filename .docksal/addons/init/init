@@ -41,8 +41,12 @@ fin exec sed -i 's/DB_PASSWORD=/DB_PASSWORD=user/g' "${LARAVEL_ROOT}/.env"
 echo "Installing artisan addon..."
 fin addon install artisan
 
-echo "Installing cti-b2b addon..."
-fin addon install cti-b2b
+# Install all the Laravel Packages required by the project
+fin exec composer require laravel/breeze barryvdh/laravel-debugbar --dev
+fin exec composer require nwidart/laravel-modules spatie/laravel-permission livewire/livewire
+fin exec php artisan breeze:install blade --dev
+fin exec php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+fin exec php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
 
 # This code resolve PHP Composer create-project issue copying all needed files.
 # Ref.: https://github.com/composer/composer/issues/7455
@@ -50,12 +54,7 @@ cd $PROJECT_ROOT
 cp -R .docksal $LARAVEL_ROOT
 cp -R .github $LARAVEL_ROOT
 cp README.md $LARAVEL_ROOT/COATI.md
-cd ..
-mv $LARAVEL_ROOT $LARAVEL_ROOT-Old
-cd $LARAVEL_ROOT-Old
-mv $LARAVEL_ROOT ..
-cd ..
-sudo rm -R $LARAVEL_ROOT-Old #needs sudo password
+fin project stop
 
 echo "------------------------------------"
 echo -e "${green}Installation complete.${NC}"
