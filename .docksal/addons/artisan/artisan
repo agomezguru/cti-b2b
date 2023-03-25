@@ -13,3 +13,10 @@
 # run the command in the container.
 cd "$(dirname "$PROJECT_ROOT/$DOCROOT")"
 fin exec php artisan "$@"
+
+# install all the Laravel Packages required by the project
+fin exec composer require laravel/breeze barryvdh/laravel-debugbar --dev
+fin exec composer require nwidart/laravel-modules spatie/laravel-permission livewire/livewire
+fin exec php artisan breeze:install
+#fin exec php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+#fin exec php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
