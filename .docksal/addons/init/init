@@ -45,7 +45,7 @@ fin addon install artisan
 cd "$PROJECT_ROOT/$LARAVEL_ROOT"
 fin exec composer require laravel/breeze barryvdh/laravel-debugbar --dev
 fin exec composer require nwidart/laravel-modules spatie/laravel-permission livewire/livewire
-fin exec php artisan breeze:install blade --dev
+fin exec php artisan breeze:install blade
 fin exec php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
 fin exec php artisan vendor:publish --provider="Barryvdh\Debugbar\ServiceProvider"
 
